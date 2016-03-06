@@ -1,8 +1,9 @@
 #include "window.h"
-// #include "adcreader.h"
+#include "adcreader.h"
 
 #include <cmath>  // for sine stuff
 
+double maximum = 0.0;
 
 Window::Window() : gain(5), count(0)
 {
@@ -15,23 +16,28 @@ Window::Window() : gain(5), count(0)
 	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
 
 	// set up the thermometer
-	thermo = new QwtThermo; 
-	thermo->setFillBrush( QBrush(Qt::red) );
-	thermo->setRange(0, 20);
-	thermo->show();
-
+    // thermo = new QwtThermo;
+    // thermo->setFillBrush( QBrush(Qt::red) );
+    // thermo->setScale(0, 20);
+    // thermo->show();
+    m_label = new QwtTextLabel;
+    m_label->setText("Max: ");
+    m_label->show();
+    m1_label= new QwtTextLabel;
+    m1_label->setText("0");
+    m1_label->show();
 
 	// set up the initial plot data
 	for( int index=0; index<plotDataSize; ++index )
 	{
 		xData[index] = index;
-		yData[index] = gain * sin( M_PI * index/50 );
+        yData[index] = gain * sin( M_PI * index/50 ); //0;
 	}
 
 	curve = new QwtPlotCurve;
 	plot = new QwtPlot;
 	// make a plot curve from the data and attach it to the plot
-	curve->setSamples(xData, yData, plotDataSize);
+    // curve->setSamples(xData, yData, plotDataSize);
 	curve->attach(plot);
 
 	plot->replot();
@@ -41,7 +47,9 @@ Window::Window() : gain(5), count(0)
 	// set up the layout - knob above thermometer
 	vLayout = new QVBoxLayout;
 	vLayout->addWidget(knob);
-	vLayout->addWidget(thermo);
+    vLayout->addWidget(m_label);
+    vLayout->addWidget(m1_label);
+    //vLayout->addWidget(thermo);
 
 	// plot to the left of knob and thermometer
 	hLayout = new QHBoxLayout;
@@ -55,15 +63,15 @@ Window::Window() : gain(5), count(0)
 	// At the moment it doesn't do anything else than
 	// running in an endless loop and which prints out "tick"
 	// every second.
-//	adcreader = new ADCreader();
-//	adcreader->start();
+    adcreader = new ADCreader();
+    adcreader->start();
 }
 
 Window::~Window() {
 	// tells the thread to no longer run its endless loop
-//	adcreader->quit();
+    adcreader->quit();
 	// wait until the run method has terminated
-//	adcreader->wait();
+    adcreader->wait();
 //	delete adcreader;
 }
 
@@ -79,7 +87,7 @@ void Window::timerEvent( QTimerEvent * )
 	plot->replot();
 
 	// set the thermometer value
-	thermo->setValue( inVal + 10 );
+    // thermo->setValue( inVal + 10 );
 }
 
 

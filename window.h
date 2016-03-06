@@ -1,14 +1,15 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <qwt/qwt_thermo.h>
-#include <qwt/qwt_knob.h>
-#include <qwt/qwt_plot.h>
-#include <qwt/qwt_plot_curve.h>
+#include <qwt_thermo.h>
+#include <qwt_knob.h>
+#include <qwt_plot.h>
+#include <qwt_plot_curve.h>
+#include <qwt_text_label.h>
 
 #include <QBoxLayout>
 
-// #include "adcreader.h"
+#include "adcreader.h"
 
 // class definition 'Window'
 class Window : public QWidget
@@ -29,6 +30,8 @@ public slots:
 // internal variables for the window class
 private:
 	QwtKnob      *knob;
+    QwtTextLabel *m_label;
+    QwtTextLabel *m1_label;
 	QwtThermo    *thermo;
 	QwtPlot      *plot;
 	QwtPlotCurve *curve;
@@ -37,7 +40,7 @@ private:
 	QVBoxLayout  *vLayout;  // vertical layout
 	QHBoxLayout  *hLayout;  // horizontal layout
 
-	static const int plotDataSize = 100;
+    static const int plotDataSize = 100; //1000;
 
 	// data arrays for the plot
 	double xData[plotDataSize];
@@ -46,7 +49,7 @@ private:
 	double gain;
 	int count;
 
-//	ADCreader *adcreader;
+    ADCreader *adcreader;
 };
 
 #endif // WINDOW_H

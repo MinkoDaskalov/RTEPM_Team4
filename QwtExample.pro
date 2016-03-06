@@ -8,8 +8,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = QwtExample
 
-LIBS += -lqwt -lm
+LIBS += -lqwt -lm -lbcm2835 -lrt
 
-HEADERS += window.h adcreader.h
+HEADERS += window.h gz_clk.h adcreader.h
 
-SOURCES += main.cpp window.cpp adcreader.cpp
+SOURCES += main.cpp window.cpp gz_clk.c adcreader.cpp
+
+CONFIG += qwt
+
+INCLUDEPATH += /usr/local/qwt-6.1.2/include
+
+LIBS += -L/usr/local/qwt-6.1.2/lib/ -lqwt
